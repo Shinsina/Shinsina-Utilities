@@ -1,20 +1,8 @@
-import puppeteer from 'puppeteer';
 import * as cheerio from 'cheerio';
 import striptags from 'striptags';
 import inquirer from 'inquirer';
 import fs from 'fs';
-
-async function crawl({ url, root }) {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.setJavaScriptEnabled(false);
-  await page.goto(url, { waitUntil: 'networkidle0' });
-  await page.setViewport({ width: 1800, height: 900 });
-  const article = await page.$(root);
-  const html = await page.evaluate((a) => a.innerHTML, article);
-  await browser.close();
-  return { url, html };
-}
+import crawl from '../utils/crawl.js';
 
 const main = async () => {
   const { urlListFileName, root } = await inquirer.prompt([
@@ -34,7 +22,7 @@ const main = async () => {
   const fileData = fs.readFileSync(urlListFileName);
   const urls = Array.isArray(JSON.parse(fileData)) ? [...JSON.parse(fileData)] : [];
   urls.forEach(async (url, index) => {
-    const crawled = await crawl({ url, root });
+    const crawled = await crawl({ url, root, enableJs: false });
     const { html } = crawled;
     const $ = cheerio.load(html, {}, false);
     const uniqueURL = new Set();
