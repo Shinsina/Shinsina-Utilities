@@ -9,7 +9,7 @@
     "cheerio": "^1.0.0",
     "inquirer": "^10.2.2",
     "node-fetch": "^3.3.2",
-    "puppeteer": "^22.11.2",
+    "puppeteer": "^22.15.0",
     "striptags": "^3.2.0"
   },
   "devDependencies": {
